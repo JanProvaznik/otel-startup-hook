@@ -5,7 +5,13 @@
 
 
 3. copy publish contents of otel-startup-hook2 to MSBuild Fx bootstrap
-4. msbuild\artifacts\bin\bootstrap\net472\MSBuild\Current\Bin\MSBuild.exe
+5.
+```
+$env:APPDOMAIN_MANAGER_ASM = "otel-startup-hook2, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"
+$env:APPDOMAIN_MANAGER_TYPE = "MyAppDomainManager"
+$env:COMPLUS_Version = "v4.0.30319"
+```
+6. msbuild\artifacts\bin\bootstrap\net472\MSBuild\Current\Bin\MSBuild.exe
 
 Unhandled Exception: System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. ---> System.IO.FileLoadException: Could not load file or assembly 'System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
    at System.Runtime.InteropServices.Marshal.GetDelegateForFunctionPointerInternal(IntPtr ptr, Type t)
