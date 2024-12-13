@@ -3,6 +3,7 @@ using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 using System;
 using System.Reflection;
+using System.Diagnostics;
 
 #pragma warning disable IDE1006 // Naming Styles
 
@@ -22,7 +23,7 @@ internal static class StartupHook
     /// <summary>
     /// Comma separated list of source names to feed to <see cref="TracerProviderBuilder.AddSource(string[])"/> 
     /// </summary>
-    private static readonly string sourceNames = Environment.GetEnvironmentVariable("OTEL_TRACE_SOURCE_NAMES");
+    private static readonly string sourceNames = "Microsoft.Build";
 
     private static void InitOtel()
     {
@@ -30,7 +31,7 @@ internal static class StartupHook
                        .CreateDefault()
                 .AddService(".NET CLR OpenTelemetry Hook", version);
 
-        var tracer =
+        TracerProviderBuilder tracer =
             Sdk
                .CreateTracerProviderBuilder()
                .SetResourceBuilder(resource);
@@ -51,7 +52,10 @@ internal static class StartupHook
     public static void Initialize()
     {
         InitOtel();
+#if NETFRAMEWORK
+        System.Windows.Forms.MessageBox.Show("Hello2 From: " + Process.GetCurrentProcess().ProcessName);
+#endif
         // we need to flush the messages before the process quits to ensure traces are cleaned up.
-        AppDomain.CurrentDomain.ProcessExit += (_, _) => (tracerHolder as IDisposable)?.Dispose();
+        AppDomain.CurrentDomain.ProcessExit += (a, b) => (tracerHolder as IDisposable)?.Dispose();
     }
 }
