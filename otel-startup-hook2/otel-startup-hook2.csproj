@@ -10,7 +10,6 @@
 
   <ItemGroup>
         <Reference Include="System.Windows.Forms" Condition="'$(TargetFramework)' == 'net472'" />
-        <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
 
 
