@@ -1,6 +1,6 @@
-﻿using OpenTelemetry;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Resources;
+﻿// using OpenTelemetry;
+// using OpenTelemetry.Trace;
+// using OpenTelemetry.Resources;
 using System;
 using System.Reflection;
 using System.Diagnostics;
@@ -11,12 +11,14 @@ using System.Diagnostics;
 /// Type that implements the <see href="https://github.com/dotnet/runtime/blob/52e1ad3779e57c35d2416cd10d8ad7d75b2c0c8b/docs/design/features/host-startup-hook.md"> .NET CLR Startup Hook protocol</see>
 /// to allow apps that have <see cref="System.Diagnostics.Activity"/> spans created, but no direct dependency on the OpenTelemetry SDK, to still have their traces collected. 
 /// </summary>
-internal static class StartupHook
+public static class StartupHook
 {
     /// <summary>
     /// Needed so that we can dispose the tracer on exit.
     /// </summary>
     private static object tracerHolder = null;
+
+    public static string proof = "proof"; 
 
     private static readonly string version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
@@ -27,26 +29,26 @@ internal static class StartupHook
 
     private static void InitOtel()
     {
-        var resource = ResourceBuilder
-                       .CreateDefault()
-                .AddService(".NET CLR OpenTelemetry Hook", version);
+        // var resource = ResourceBuilder
+        //                .CreateDefault()
+        //         .AddService(".NET CLR OpenTelemetry Hook", version);
 
-        TracerProviderBuilder tracer =
-            Sdk
-               .CreateTracerProviderBuilder()
-               .SetResourceBuilder(resource);
+        // TracerProviderBuilder tracer =
+        //     Sdk
+        //        .CreateTracerProviderBuilder()
+        //        .SetResourceBuilder(resource);
 
-        if (sourceNames is string sources)
-        {
-            var sourceList = sources.Split(',');
-            tracer = tracer.AddSource(sourceList);
-        }
+        // if (sourceNames is string sources)
+        // {
+        //     var sourceList = sources.Split(',');
+        //     tracer = tracer.AddSource(sourceList);
+        // }
 
 
-        tracerHolder =
-            tracer
-               .AddOtlpExporter()
-               .Build();
+        // tracerHolder =
+        //     tracer
+        //        .AddOtlpExporter()
+        //        .Build();
     }
 
     public static void Initialize()
@@ -55,6 +57,7 @@ internal static class StartupHook
 #if NETFRAMEWORK
         System.Windows.Forms.MessageBox.Show("Hello2 From: " + Process.GetCurrentProcess().ProcessName);
 #endif
+        proof = "initialized correctly";
         // we need to flush the messages before the process quits to ensure traces are cleaned up.
         AppDomain.CurrentDomain.ProcessExit += (a, b) => (tracerHolder as IDisposable)?.Dispose();
     }

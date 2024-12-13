@@ -17,7 +17,8 @@ internal static class Hook
     /// </summary>
     public static void Initialize()
     {
-        var a = Assembly.Load(AssemblyName.GetAssemblyName(@"yourdevicepath\otel-startup-hook\bin\Debug\net472\publish\otel-startup-hook.dll"));
+        var a = Assembly.Load(AssemblyName.GetAssemblyName(@"C:\Users\janprovaznik\dev\otel-startup-hook\src\bin\Debug\net472\otel-startup-hook.dll"));
+        // "C:\Users\janprovaznik\dev\otel-startup-hook\src\bin\Debug\net472\otel-startup-hook.dll"
         // a.CreateInstance("StartupHook")?.GetType().GetMethod("Initialize")?.Invoke(null, null);
         // it's static
         System.Windows.Forms.MessageBox.Show("Hello From: " + Process.GetCurrentProcess().ProcessName);
